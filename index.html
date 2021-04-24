@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pigs</title>
+</head>
+<body>
+    
+    <h1>Hey, did you guys know I have guinea pigs? Shocker.</h1>
+
+    <article>
+
+    </article>
+
+    <input type="text" name = "animal" placeholder = "Enter your Animal's Name">
+    <button id = "submit">Submit</button>
+
+    <script>
+        var animalInput = document.querySelector("input[name=animal]");
+        function postAnimal() {
+            const animal = {
+                animalName: animalInput.value
+            }
+            fetch("/api/addNpc", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(animal)
+            }).then(response => {
+                console.log(response);
+            });
+        }
+
+        function getAnimals() {
+            fetch("/api/npcs", {
+                method: "GET",
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                const article = document.querySelector("article");
+
+                data.forEach(item => {
+                    const newAnimalParagraph = document.createElement("p");
+                    newAnimalParagraph.textContent = item["animalName"];
+                    article.appendChild(newAnimalParagraph);
+                })
+                console.log(data);
+            })
+        }
+
+        getAnimals();
+
+        document.querySelector("#submit").addEventListener("click", postAnimal);
+     
+
+    </script>
+</body>
+</html>
