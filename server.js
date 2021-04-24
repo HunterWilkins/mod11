@@ -27,6 +27,25 @@ app.get("/api/npcs", async (req, res) => {
     res.json(jsonData);
 });
 
+app.get("/api/npcs/:name", async (req, res) => {
+    console.log(req.params.name);
+    const fileData = await customReadFile();
+
+    fileData.forEach(item => {
+        if (item["animalName"].toLowerCase() === req.params.name.trim()) {
+            res.json(item);
+        }
+    });
+
+    const chosenName = fileData.filter(item => item["animalName"].toLowerCase() === req.params.name.trim())[0];
+    if (chosenName) {
+        res.json(chosenName);
+    }
+    else {
+        res.json({"message" : "NO ANIMALS with that name"});
+    }
+});
+
 app.post("/api/addNpc", (req, res) => {
     console.log(req.body);
     console.log("THIS IS RUNNING");
